@@ -11,12 +11,18 @@ func SetUp(app *fiber.App) {
 
 	app.Get("/api/get_all_content", controller.GetAllContent)
 
+	app.Get("/api/get_all_app", controller.GetAllApp)
+
+	app.Get("/api/get_schedule/:user_id", )
+
+	app.Get("/api/get_purchased_content/:user_id", )
+
 	app.Post("/api/create_user", controller.CreateNewUser)
 
-	app.Post("/api/purchase_content/:user_id/:content_id", )
+	app.Post("/api/purchase_content", controller.PurchaseContent)
 
-	app.Post("/api/purchase_all_content/:user_id", )
+	app.Post("/api/purchase_all_content", )
 
-	app.Post("/api/add_schedule/:user_id/:app_id", )
-	
+	app.Post("/api/add_schedule", controller.AddSchedule)
+
 }

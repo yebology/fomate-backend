@@ -1,9 +1,12 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/yebology/fomate-backend.git/database"
+	"github.com/yebology/fomate-backend.git/router"
 )
 
 func main() {
@@ -16,4 +19,8 @@ func main() {
 		AllowOrigins: "*",
 		AllowHeaders: "Origin, Content-Type, Accept",
 	}))
+
+	router.SetUp(app)
+
+	log.Print(app.Listen(":8080"))
 }

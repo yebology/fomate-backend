@@ -17,7 +17,7 @@ func GetPurchasedContentIds(c *fiber.Ctx, ctx context.Context, userId primitive.
 	collection := database.GetDatabase().Collection("purchased_content")
 	cursor, err := collection.Find(ctx, bson.M{"user_id": userId})
 	if err != nil {
-		return nil, errors.GetError(c, "Error while find purchased content id.")
+		return nil, errors.GetError(c, "Error while retrive filtered purchased content id.")
 	}
 	defer cursor.Close(ctx)
 
@@ -41,7 +41,7 @@ func GetContentByFilter(c *fiber.Ctx, ctx context.Context, filter bson.M) ([]mod
 	collection := database.GetDatabase().Collection("content")
 	cursor, err := collection.Find(ctx, filter)
 	if err != nil {
-		return nil, errors.GetError(c, "Error while find purchased content.")
+		return nil, errors.GetError(c, "Error while retrieve filtered purchased content.")
 	}
 	defer cursor.Close(ctx)
 

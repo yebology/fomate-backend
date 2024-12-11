@@ -76,11 +76,6 @@ func AddSchedule(c *fiber.Ctx) error {
 		return errors.GetError(c, "Error while parsing data.")
 	}
 
-	_, err = primitive.ObjectIDFromHex(schedule.AppId.Hex())
-	if err != nil {
-		return errors.GetError(c, "Error invalid app id format.")
-	}
-
 	_, err = primitive.ObjectIDFromHex(schedule.UserId.Hex())
 	if err != nil {
 		return errors.GetError(c, "Error invalid user id format.")
@@ -96,6 +91,47 @@ func AddSchedule(c *fiber.Ctx) error {
 
 }
 
+func PurchaseAllContent(c *fiber.Ctx) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	id := c.Params("user_id")
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return errors.GetError(c, "Error invalid user id format.")
+	}
+
+	var contents []model.Content
+	collection := database.GetDatabase().Collection("contents")
+	cursor, err := collection.Find(ctx, bson.M{})
+	if err != nil {
+		return errors.GetError(c, "Error while retrieving data from 'content' collection.")
+	}
+	defer cursor.Close(ctx)
+
+	err = cursor.All(ctx, &contents)
+	if err != nil {
+		return errors.GetError(c, "Error while decoding data.")
+	}
+
+	var purchasedContents []interface{}
+	for _, con := range contents {
+		purchasedContents = append(purchasedContents, model.PurchasedContent{
+			UserId: objectId,
+			ContentId: con.Id,
+		})
+	}
+
+	collection = database.GetDatabase().Collection("purchased_content")
+	res, err := collection.InsertMany(ctx, purchasedContents)
+	if err != nil {
+		return errors.GetError(c, "Error while insert new data.")
+	}
+
+	return c.Status(fiber.StatusOK).JSON(res)
+
+}
 
 func GetUser(c *fiber.Ctx) error {
 
@@ -116,5 +152,33 @@ func GetUser(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(user)
+
+}
+
+func GetUserSchedule(c *fiber.Ctx) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	id := c.Params("user_id")
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return errors.GetError(c, "Error invalid user id format.")
+	}
+
+	var schedules []model.Schedule
+	collection := database.GetDatabase().Collection("schedule")
+	cursor, err := collection.Find(ctx, bson.M{"user_id": objectId})
+	if err != nil {
+		return errors.GetError(c, "Error while retrieve data from the 'schedule' collection.")
+	}
+	defer cursor.Close(ctx)
+
+	err = cursor.All(ctx, &schedules)
+	if err != nil {
+		return errors.GetError(c, "Error while decoding data.")
+	}
+
+	return c.Status(fiber.StatusOK).JSON(schedules)
 
 }

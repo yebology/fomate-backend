@@ -21,7 +21,7 @@ func GetAllApp(c *fiber.Ctx) error {
 	collection := database.GetDatabase().Collection("app")
 	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
-		return errors.GetError(c, "Error while find app id.")
+		return errors.GetError(c, "Error while retrieve data from the 'app' collection.")
 	}
 	defer cursor.Close(ctx)
 

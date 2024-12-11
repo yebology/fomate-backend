@@ -11,7 +11,7 @@ func SetUp(app *fiber.App) {
 
 	app.Get("/api/get_all_app", controller.GetAllApp)
 
-	app.Get("/api/get_schedule/:user_id", )
+	app.Get("/api/get_schedule/:user_id", controller.GetUserSchedule)
 
 	app.Get("/api/get_purchased_content/:user_id", controller.GetPurchasedContent)
 
@@ -21,7 +21,7 @@ func SetUp(app *fiber.App) {
 
 	app.Post("/api/purchase_content", controller.PurchaseContent)
 
-	app.Post("/api/purchase_all_content", )
+	app.Post("/api/purchase_all_content/:user_id", controller.PurchaseAllContent)
 
 	app.Post("/api/add_schedule", controller.AddSchedule)
 

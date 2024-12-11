@@ -22,5 +22,5 @@ func main() {
 
 	router.SetUp(app)
 
-	log.Print(app.Listen(":8080"))
+	log.Fatal(app.Listen(":8080"))
 }

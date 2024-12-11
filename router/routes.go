@@ -1,10 +1,13 @@
 package router
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/yebology/fomate-backend.git/controller"
+)
 
 func SetUp(app *fiber.App) {
 
-	app.Get("/api/get_user/:user_id", )
+	app.Get("/api/get_user/:user_id", controller.CreateNewUser)
 
 	app.Get("/api/get_all_content", )
 

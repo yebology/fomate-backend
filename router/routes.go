@@ -13,9 +13,9 @@ func SetUp(app *fiber.App) {
 
 	app.Get("/api/get_schedule/:user_id", )
 
-	app.Get("/api/get_purchased_content/:user_id", )
+	app.Get("/api/get_purchased_content/:user_id", controller.GetPurchasedContent)
 
-	app.Get("/api/get_unpurchased_content/:user_id", )
+	app.Get("/api/get_unpurchased_content/:user_id", controller.GetUnpurchasedContent)
 
 	app.Post("/api/create_user", controller.CreateNewUser)
 

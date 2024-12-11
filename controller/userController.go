@@ -12,6 +12,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+func LogIn(c *fiber.Ctx) error {
+	
+}
 
 func CreateNewUser(c *fiber.Ctx) error {
 
@@ -146,7 +149,7 @@ func GetUser(c *fiber.Ctx) error {
 
 	var user model.User
 	collection := database.GetDatabase().Collection("user")
-	err = collection.FindOne(ctx, bson.M{"id": objectId}).Decode(&user)
+	err = collection.FindOne(ctx, bson.M{"_id": objectId}).Decode(&user)
 	if err != nil {
 		return errors.GetError(c, "Error while decoding user.")
 	}

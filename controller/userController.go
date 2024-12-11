@@ -93,7 +93,7 @@ func AddSchedule(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(res)
-	
+
 }
 
 
@@ -103,10 +103,9 @@ func GetUser(c *fiber.Ctx) error {
 	defer cancel()
 
 	id := c.Params("user_id")
-
 	objectId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return errors.GetError(c, "Error invalid id format.")
+		return errors.GetError(c, "Error invalid user id format.")
 	}
 
 	var user model.User

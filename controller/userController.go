@@ -43,14 +43,14 @@ func GetUser(c *fiber.Ctx) error {
 
 	objectId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return errors.GetError(c, "Error invalid id format")
+		return errors.GetError(c, "Error invalid id format.")
 	}
 
 	var user model.User
 	collection := database.GetDatabase().Collection("user")
-	err = collection.FindOne(ctx, bson.M{"_id": objectId}).Decode(&user)
+	err = collection.FindOne(ctx, bson.M{"id": objectId}).Decode(&user)
 	if err != nil {
-		return errors.GetError(c, "Error while decoding user")
+		return errors.GetError(c, "Error while decoding user.")
 	}
 
 	return c.Status(fiber.StatusOK).JSON(user)

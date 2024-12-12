@@ -8,13 +8,10 @@ import (
 	"github.com/yebology/fomate-backend.git/database"
 	"github.com/yebology/fomate-backend.git/errors"
 	"github.com/yebology/fomate-backend.git/model"
+	"github.com/yebology/fomate-backend.git/model/param"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
-
-func LogIn(c *fiber.Ctx) error {
-	
-}
 
 func CreateNewUser(c *fiber.Ctx) error {
 
@@ -141,20 +138,34 @@ func GetUser(c *fiber.Ctx) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	id := c.Params("user_id")
-	objectId, err := primitive.ObjectIDFromHex(id)
+	var login param.Login
+	err := c.BodyParser(&login)
 	if err != nil {
-		return errors.GetError(c, "Error invalid user id format.")
+		return errors.GetError(c, "Error while parsing data.")
 	}
 
-	var user model.User
+	var users []model.User
 	collection := database.GetDatabase().Collection("user")
-	err = collection.FindOne(ctx, bson.M{"_id": objectId}).Decode(&user)
+	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
-		return errors.GetError(c, "Error while decoding user.")
+		return errors.GetError(c, "Error while retrieving data from 'user' collection.")
+	}
+	defer cursor.Close(ctx)
+
+	err = cursor.All(ctx, &users)
+	if err != nil {
+		return errors.GetError(c, "Error while decoding data.")
 	}
 
-	return c.Status(fiber.StatusOK).JSON(user)
+	var currentUser *model.User
+	for _, u := range users {
+		if u.Email == login.Email && u.Password == login.Password {
+			currentUser = &u
+			return c.Status(fiber.StatusOK).JSON(currentUser)
+		}
+	}
+
+	return errors.GetError(c, "Invalid email or password.")
 
 }
 

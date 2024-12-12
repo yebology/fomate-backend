@@ -8,7 +8,7 @@ import (
 func SetUp(app *fiber.App) {
 
 	// done check postman
-	app.Get("/api/get_user/:user_id", controller.GetUser)
+	app.Get("/api/get_user", controller.GetUser)
 
 	app.Get("/api/get_all_app", controller.GetAllApp)
 
@@ -17,8 +17,6 @@ func SetUp(app *fiber.App) {
 	app.Get("/api/get_purchased_content/:user_id", controller.GetPurchasedContent)
 
 	app.Get("/api/get_unpurchased_content/:user_id", controller.GetUnpurchasedContent)
-
-	app.Post("/api/log_in", controller.LogIn)
 
 	// done check postman
 	app.Post("/api/create_user", controller.CreateNewUser)

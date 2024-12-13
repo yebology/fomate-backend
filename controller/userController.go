@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -100,26 +101,31 @@ func PurchaseAllContent(c *fiber.Ctx) error {
 	var lifetimeDeal helper.LifetimeDeal
 	err := c.BodyParser(&lifetimeDeal)
 	if err != nil {
+		fmt.Println("aaa")
 		return errors.GetError(c, err.Error())
 	}
 
 	objectId, err := primitive.ObjectIDFromHex(lifetimeDeal.UserId.Hex())
 	if err != nil {
+		fmt.Println("ddd")
 		return errors.GetError(c, err.Error())
 	}
 
 	var contents []model.Content
-	collection := database.GetDatabase().Collection("contents")
+	collection := database.GetDatabase().Collection("content")
 	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
+		fmt.Println("ccc")
 		return errors.GetError(c, err.Error())
 	}
 	defer cursor.Close(ctx)
 
 	err = cursor.All(ctx, &contents)
 	if err != nil {
+		fmt.Println("bb")
 		return errors.GetError(c, err.Error())
 	}
+	fmt.Println("conn", contents)
 	
 	var purchasedContents []interface{}
 	for _, con := range contents {
@@ -127,6 +133,7 @@ func PurchaseAllContent(c *fiber.Ctx) error {
 			UserId: objectId,
 			ContentId: con.Id,
 		})
+		fmt.Println(purchasedContents...)
 	}
 
 	collection = database.GetDatabase().Collection("purchased_content")

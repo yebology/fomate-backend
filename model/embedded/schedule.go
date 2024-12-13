@@ -1,4 +1,4 @@
-package model
+package embedded
 
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
@@ -8,10 +8,10 @@ type Schedule struct {
 
 	UserId primitive.ObjectID `json:"user_id" bson:"user_id,omitempty"`
 
-	AppName string `json:"app_name"`
+	AppName string `json:"appName"`
 
-	StartTime uint64 `json:"start_time"`
+	StartTime uint64 `json:"startTime"`
 	
-	EndTime uint64 `json:"end_time"`
+	EndTime uint64 `json:"endTime"`
 
 }

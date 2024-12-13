@@ -6,16 +6,16 @@ type Content struct {
 
 	Id primitive.ObjectID `json:"id" bson:"_id,omitempty"`
 
-	ContentLink string `json:"content_link"`
+	ContentLink string `json:"contentLink"`
 
-	ContentTitle string `json:"content_title"`
+	ContentTitle string `json:"contentTitle"`
 
-	ContentDuration uint64 `json:"content_duration"`
+	ContentDuration uint64 `json:"contentDuration"`
 
-	ContentDescription string `json:"content_description"`
+	ContentDescription string `json:"contentDescription"`
 
-	ContentPrice uint64 `json:"content_price"`
+	ContentPrice uint64 `json:"contentPrice"`
 
-	ContentInsights []string `json:"content_insights"`
+	ContentInsights []string `json:"contentInsights"`
 	
 }

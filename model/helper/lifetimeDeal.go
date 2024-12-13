@@ -1,11 +1,11 @@
-package model
+package helper
 
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
-type App struct {
+type LifetimeDeal struct {
 
 	Id primitive.ObjectID `json:"id" bson:"_id,omitempty"`
-	
-	AppName string `json:"appName"`
 
+	UserId primitive.ObjectID `json:"user_id" bson:"user_id,omitempty"`
+	
 }

@@ -21,13 +21,13 @@ func GetAllApp(c *fiber.Ctx) error {
 	collection := database.GetDatabase().Collection("app")
 	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
-		return errors.GetError(c, "Error while retrieve data from the 'app' collection.")
+		return errors.GetError(c, err.Error())
 	}
 	defer cursor.Close(ctx)
 
 	err = cursor.All(ctx, &apps)
 	if err != nil {
-		return errors.GetError(c, "Error while decoding data.")
+		return errors.GetError(c, err.Error())
 	}
 
 	return c.Status(fiber.StatusOK).JSON(apps)

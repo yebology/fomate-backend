@@ -6,8 +6,8 @@ type PurchasedContent struct {
 
 	Id primitive.ObjectID `json:"id" bson:"_id,omitempty"`
 
-	UserId primitive.ObjectID `json:"user_id" bson:"user_id,omitempty"`
+	UserId primitive.ObjectID `json:"userId" bson:"userId,omitempty"`
 
-	ContentId primitive.ObjectID `json:"content_id" bson:"content_id,omitempty"`
+	ContentId primitive.ObjectID `json:"contentId" bson:"contentId,omitempty"`
 
 }

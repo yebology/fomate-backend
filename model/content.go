@@ -8,6 +8,8 @@ type Content struct {
 
 	ContentLink string `json:"contentLink"`
 
+	ContentThumbnail string `json:"contentThumbnail"`
+
 	ContentTitle string `json:"contentTitle"`
 
 	ContentDuration uint64 `json:"contentDuration"`

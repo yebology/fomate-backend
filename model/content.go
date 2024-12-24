@@ -6,6 +6,8 @@ type Content struct {
 
 	Id primitive.ObjectID `json:"id" bson:"_id,omitempty"`
 
+	IdNumber uint64 `json:"idNumber"`
+
 	ContentLink string `json:"contentLink"`
 
 	ContentThumbnail string `json:"contentThumbnail"`

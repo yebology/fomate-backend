@@ -14,4 +14,6 @@ type Schedule struct {
 	
 	EndTime uint64 `json:"endTime"`
 
+	Timer uint64 `json:"timer"`
+
 }

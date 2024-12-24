@@ -14,7 +14,7 @@ func GetPurchasedContentIds(ctx context.Context, userId primitive.ObjectID) ([] 
 
 	var purchasedContents []embedded.PurchasedContent
 	collection := database.GetDatabase().Collection("purchased_content")
-	cursor, err := collection.Find(ctx, bson.M{"user_id": userId})
+	cursor, err := collection.Find(ctx, bson.M{"userId": userId})
 	if err != nil {
 		return nil, err
 	}

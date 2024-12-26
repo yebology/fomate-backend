@@ -11,6 +11,9 @@ func SetUp(app *fiber.App) {
 	app.Get("/api/get_all_app", controller.GetAllApp)
 
 	// done check postman
+	app.Get("/api/get_health/:userId", controller.GetUserHealth)
+
+	// done check postman
 	app.Get("/api/get_schedule/:userId", controller.GetUserSchedule)
 
 	// done check postman
@@ -33,5 +36,8 @@ func SetUp(app *fiber.App) {
 
 	// done check postman
 	app.Post("/api/add_schedule", controller.AddSchedule)
+
+	// done check postman
+	app.Post("/api/update_health", controller.UpdateUserHealth)
 
 }

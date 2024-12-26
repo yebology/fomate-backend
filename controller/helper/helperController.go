@@ -50,5 +50,24 @@ func GetContentByFilter(ctx context.Context, filter bson.M) ([]model.Content, er
 	}
 
 	return contents, nil
+
 }
 
+func GetUsers(ctx context.Context, filter bson.M) ([]model.User, error) {
+
+	var users []model.User
+	collection := database.GetDatabase().Collection("user")
+	cursor, err := collection.Find(ctx, filter)
+	if err != nil {
+		return nil, err 
+	}
+	defer cursor.Close(ctx)
+
+	err = cursor.All(ctx, &users)
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
+
+}

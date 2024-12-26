@@ -1,4 +1,4 @@
-package helper
+package param
 
 type Login struct {
 

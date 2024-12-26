@@ -5,11 +5,12 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/yebology/fomate-backend.git/controller/helper"
 	"github.com/yebology/fomate-backend.git/database"
 	"github.com/yebology/fomate-backend.git/errors"
 	"github.com/yebology/fomate-backend.git/model"
 	"github.com/yebology/fomate-backend.git/model/embedded"
-	"github.com/yebology/fomate-backend.git/model/helper"
+	"github.com/yebology/fomate-backend.git/model/param"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -97,7 +98,7 @@ func PurchaseAllContent(c *fiber.Ctx) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	var lifetimeDeal helper.LifetimeDeal
+	var lifetimeDeal param.LifetimeDeal
 	err := c.BodyParser(&lifetimeDeal)
 	if err != nil {
 		return errors.GetError(c, err.Error())
@@ -139,26 +140,46 @@ func PurchaseAllContent(c *fiber.Ctx) error {
 
 }
 
+func UpdateUserHealth(c *fiber.Ctx) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var updateHealth param.UpdateHealth
+	err := c.BodyParser(&updateHealth)
+	if err != nil {
+		return errors.GetError(c, err.Error())
+	}
+
+	objectId, err := primitive.ObjectIDFromHex(updateHealth.UserId.Hex())
+	if err != nil {
+		return errors.GetError(c, err.Error())
+	}
+
+	collection := database.GetDatabase().Collection("user")
+	filter := bson.M{"_id":objectId}
+	update := bson.M{"$set":bson.M{"health":updateHealth.NewHealth}}
+	res, err := collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return errors.GetError(c, err.Error())
+	}
+
+	return c.Status(fiber.StatusOK).JSON(res)
+	
+}
+
 func GetLoginUser(c *fiber.Ctx) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	var login helper.Login
+	var login param.Login
 	err := c.BodyParser(&login)
 	if err != nil {
 		return errors.GetError(c, err.Error())
 	}
 
-	var users []model.User
-	collection := database.GetDatabase().Collection("user")
-	cursor, err := collection.Find(ctx, bson.M{})
-	if err != nil {
-		return errors.GetError(c, err.Error())
-	}
-	defer cursor.Close(ctx)
-
-	err = cursor.All(ctx, &users)
+	users, err := helper.GetUsers(ctx, bson.M{})
 	if err != nil {
 		return errors.GetError(c, err.Error())
 	}
@@ -203,5 +224,25 @@ func GetUserSchedule(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(schedules)
+
+}
+
+func GetUserHealth(c *fiber.Ctx) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	id := c.Params("userId")
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return errors.GetError(c, err.Error())
+	}
+
+	users, err := helper.GetUsers(ctx, bson.M{"_id":objectId})
+	if err != nil {
+		return errors.GetError(c, err.Error())
+	}
+
+	return c.Status(fiber.StatusOK).JSON(users[0].Health)
 
 }

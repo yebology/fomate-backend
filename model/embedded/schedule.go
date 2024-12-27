@@ -10,9 +10,9 @@ type Schedule struct {
 
 	AppName string `json:"appName"`
 
-	StartTime uint64 `json:"startTime"`
+	StartTime string `json:"startTime"`
 	
-	EndTime uint64 `json:"endTime"`
+	EndTime string `json:"endTime"`
 
 	Timer uint64 `json:"timer"`
 
